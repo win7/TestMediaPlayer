@@ -15,7 +15,7 @@ public class DetallesActivity extends AppCompatActivity {
 
     ImageView iv_foto;
     TextView tv_nombre, tv_cancion;
-    ImageButton ib_start, ib_pause;
+    ImageButton ib_start, ib_pause, ib_stop;
 
     MediaPlayer mediaPlayer;
 
@@ -30,11 +30,12 @@ public class DetallesActivity extends AppCompatActivity {
 
         ib_start = findViewById(R.id.imageButton_start);
         ib_pause = findViewById(R.id.imageButton_pause);
+        ib_stop = findViewById(R.id.imageButton_stop);
 
         Intent intent = getIntent();
         int posicion  = intent.getIntExtra("posicion", 0);
 
-        CCanciones c = MainActivity.array_list.get(posicion);
+        final CCanciones c = MainActivity.array_list.get(posicion);
 
         iv_foto.setImageResource(c.getFoto());
         tv_nombre.setText(c.getNombre_autor());
@@ -45,6 +46,7 @@ public class DetallesActivity extends AppCompatActivity {
         ib_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), c.getAudio());
                 mediaPlayer.start();
             }
         });
@@ -56,12 +58,18 @@ public class DetallesActivity extends AppCompatActivity {
             }
         });
 
+        ib_stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mediaPlayer.stop();
+            }
+        });
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("Gooo", "onDestroy");
         mediaPlayer.stop();
     }
 }
